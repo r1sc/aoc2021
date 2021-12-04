@@ -29,9 +29,9 @@ impl Board {
     }
 
     pub fn mark(&mut self, drawn: i32) {
-        for i in 0..self.cells.len() {
-            if self.cells[i].value == drawn {
-                self.cells[i].marked = true;
+        for cell in &mut self.cells {
+            if cell.value == drawn {
+                cell.marked = true;
             }
         }
     }
