@@ -117,8 +117,8 @@ fn test_sample() {
 2  0 12  3  7
 "
     .split("\n")
-    .filter(|&x| x.trim().is_empty() == false)
     .collect();
+    
     let (part_1, part_2) = main(data);
     assert!(part_1 == 4512);
     assert!(part_2 == 1924);
