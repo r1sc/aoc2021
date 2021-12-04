@@ -28,30 +28,23 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
         }
     }
 
-    fn trav(search_vec: &Vec<u32>, keep_larger: bool, current_bit: usize, bit_width: usize) -> u32 {
+    fn trav<F>(search_vec: &Vec<u32>, f: F, current_bit: usize, bit_width: usize) -> u32 where F: Fn(usize, usize) -> bool {
         if search_vec.len() == 1 {
             return search_vec[0];
         }
         let (ones, zeroes): (Vec<u32>, Vec<u32>) = search_vec
             .into_iter()
             .partition(|f| ((**f >> (bit_width - 1 - current_bit)) & 1) == 1);
-        if keep_larger {
-            if ones.len() >= zeroes.len() {
-                trav(&ones, keep_larger, current_bit + 1, bit_width)
-            } else {
-                trav(&zeroes, keep_larger, current_bit + 1, bit_width)
-            }
-        } else {
-            if ones.len() < zeroes.len() {
-                trav(&ones, keep_larger, current_bit + 1, bit_width)
-            } else {
-                trav(&zeroes, keep_larger, current_bit + 1, bit_width)
-            }
+        if f(ones.len(), zeroes.len()) {
+            trav(&ones, f, current_bit + 1, bit_width)
+        }
+        else {
+            trav(&zeroes, f, current_bit + 1, bit_width)
         }
     }
 
-    let oxygen_generator_rating = trav(&bins, true, 0, bit_width);
-    let co2_scrubber_rating = trav(&bins, false, 0, bit_width);
+    let oxygen_generator_rating = trav(&bins, |a, b| { a >= b }, 0, bit_width);
+    let co2_scrubber_rating = trav(&bins,  |a, b| { a < b }, 0, bit_width);
     (
         (epsilon * gamma) as i32,
         (oxygen_generator_rating * co2_scrubber_rating) as i32,
@@ -61,8 +54,18 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
 #[test]
 fn test_sample() {
     let data = vec![
-        "00100", "11110", "10110", "10111", "10101", "01111", "00111", "11100", "10000", "11001",
-        "00010", "01010",
+        "00100", 
+        "11110", 
+        "10110", 
+        "10111", 
+        "10101", 
+        "01111", 
+        "00111", 
+        "11100", 
+        "10000", 
+        "11001",
+        "00010", 
+        "01010",
     ];
     let (power_consumption, oxy_co2) = main(data);
     assert!(power_consumption == 198);

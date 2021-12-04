@@ -9,8 +9,9 @@ mod scan;
 mod day_1;
 mod day_2;
 mod day_3;
+mod day_4;
 
-const FUNCTIONS: [for<'r> fn(Vec<&'r str>) -> (i32, i32); 3] = [day_1::main, day_2::main, day_3::main];
+const FUNCTIONS: [for<'r> fn(Vec<&'r str>) -> (i32, i32); 4] = [day_1::main, day_2::main, day_3::main, day_4::main];
 
 fn run_day(day_number: usize) {
     println!("Results for day {}", day_number);
@@ -40,4 +41,5 @@ fn main() {
     run_day(1);
     run_day(2);
     run_day(3);
+    run_day(4);
 }
