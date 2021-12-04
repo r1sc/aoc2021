@@ -55,24 +55,19 @@ impl Board {
     }
 }
 
-fn parse_boards(lines: &[&str]) -> Vec<Board> {
-    let boards: Vec<_> = lines.chunks(5).map(Board::new).collect();
-    boards
-}
-
 pub fn main(data: Vec<&str>) -> (i32, i32) {
-    let real_data: Vec<_> = data
+    let filtered_lines: Vec<_> = data
         .into_iter()
         .filter(|&l| l.is_empty() == false)
         .collect();
-    let drawings: Vec<_> = real_data[0]
+
+    let drawings: Vec<_> = filtered_lines[0]
         .split(",")
         .map(|d| d.parse::<i32>().unwrap())
         .collect();
-    let mut boards = parse_boards(&real_data[1..]);
 
-    let mut first_to_win: Option<(i32, i32)> = None;
-    let mut last_to_win: Option<(i32, i32)> = None;
+    let mut boards: Vec<_> = filtered_lines[1..].chunks(5).map(Board::new).collect();
+    let mut winning_boards: Vec<(i32, i32)> = Vec::new();
 
     for drawn in drawings {
         for board in &mut boards {
@@ -80,16 +75,13 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
             if !board.already_won && board.check_win() {
                 board.already_won = true;
                 let score = board.get_score();
-                if first_to_win.is_none() {
-                    first_to_win = Some((score, drawn));
-                }
-                last_to_win = Some((score, drawn));
+                winning_boards.push((score, drawn));
             }
         }
     }
 
-    let ftw = first_to_win.unwrap();
-    let ltw = last_to_win.unwrap();
+    let ftw = winning_boards.first().unwrap();
+    let ltw = winning_boards.last().unwrap();
 
     (ftw.0 * ftw.1, ltw.0 * ltw.1)
 }
