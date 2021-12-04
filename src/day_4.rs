@@ -74,14 +74,13 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
             board.mark(drawn);
             if !board.already_won && board.check_win() {
                 board.already_won = true;
-                let score = board.get_score();
-                winning_boards.push((score, drawn));
+                winning_boards.push((board.get_score(), drawn));
             }
         }
     }
 
-    let ftw = winning_boards.first().unwrap();
-    let ltw = winning_boards.last().unwrap();
+    let ftw = winning_boards.first().expect("No first winner. Expected at least one to win?");
+    let ltw = winning_boards.last().expect("No last winner. Expected at least one to win?");
 
     (ftw.0 * ftw.1, ltw.0 * ltw.1)
 }
