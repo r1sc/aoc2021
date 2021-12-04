@@ -9,7 +9,7 @@ struct Board {
 
 impl Board {
     pub fn new(lines: &[&str]) -> Self {
-        let nums: Vec<_> = lines
+        let cells: Vec<_> = lines
             .iter()
             .map(|l| {
                 l.split_ascii_whitespace()
@@ -23,7 +23,7 @@ impl Board {
             .collect();
 
         Board {
-            cells: nums,
+            cells,
             already_won: false,
         }
     }
@@ -36,44 +36,22 @@ impl Board {
         }
     }
 
-    pub fn check_win(&mut self) -> bool {
-        if self.already_won {
-            return false;
-        }
+    pub fn check_win(&self) -> bool {
+        let col_win = (0..5)
+            .map(|i| self.cells.iter().skip(i).step_by(5))
+            .any(|mut col| col.all(|cell| cell.marked));
 
-        for col in 0..5 {
-            let mut won = true;
-            for row in 0..5 {
-                if !self.cells[row * 5 + col].marked {
-                    won = false;
-                    break;
-                }
-            }
-            if won {
-                self.already_won = true;
-                return true;
-            }
-        }
+        let row_win = self.cells.chunks(5).any(|row| row.iter().all(|c| c.marked));
 
-        for row in 0..5 {
-            let mut won = true;
-            for col in 0..5 {
-                if !self.cells[row * 5 + col].marked {
-                    won = false;
-                    break;
-                }
-            }
-            if won {
-                self.already_won = true;
-                return true;
-            }
-        }
-
-        false
+        col_win || row_win
     }
 
     pub fn get_score(&self) -> i32 {
-        self.cells.iter().filter(|&x| !x.marked).map(|x| x.value).sum()
+        self.cells
+            .iter()
+            .filter(|&x| !x.marked)
+            .map(|x| x.value)
+            .sum()
     }
 }
 
@@ -99,7 +77,8 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
     for drawn in drawings {
         for board in &mut boards {
             board.mark(drawn);
-            if board.check_win() {
+            if !board.already_won && board.check_win() {
+                board.already_won = true;
                 let score = board.get_score();
                 if first_to_win.is_none() {
                     first_to_win = Some((score, drawn));
