@@ -67,22 +67,22 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
         .collect();
 
     let mut boards: Vec<_> = filtered_lines[1..].chunks(5).map(Board::new).collect();
-    let mut winning_boards: Vec<(i32, i32)> = Vec::new();
+    let mut winning_boards: Vec<i32> = Vec::new();
 
     for drawn in drawings {
         for board in &mut boards {
             board.mark(drawn);
             if !board.already_won && board.check_win() {
                 board.already_won = true;
-                winning_boards.push((board.get_score(), drawn));
+                winning_boards.push(board.get_score() * drawn);
             }
         }
     }
 
-    let ftw = winning_boards.first().expect("No first winner. Expected at least one to win?");
-    let ltw = winning_boards.last().expect("No last winner. Expected at least one to win?");
+    let ftw = *winning_boards.first().expect("No first winner. Expected at least one to win?");
+    let ltw = *winning_boards.last().expect("No last winner. Expected at least one to win?");
 
-    (ftw.0 * ftw.1, ltw.0 * ltw.1)
+    (ftw, ltw)
 }
 
 #[test]
@@ -111,7 +111,6 @@ fn test_sample() {
     .collect();
     
     let (part_1, part_2) = main(data);
-    assert!(part_1 == 4512);
-    assert!(part_2 == 1924);
-    println!("{}", part_1)
+    assert_eq!(part_1, 4512);
+    assert_eq!(part_2, 1924);
 }
