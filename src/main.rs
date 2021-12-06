@@ -1,7 +1,7 @@
 use std::{
     fs::File,
     io::{BufRead, BufReader},
-    time::Instant,
+    time::Instant, fmt::Display,
 };
 
 #[macro_use]
@@ -11,16 +11,9 @@ mod day_2;
 mod day_3;
 mod day_4;
 mod day_5;
+mod day_6;
 
-const FUNCTIONS: [for<'r> fn(Vec<&'r str>) -> (i32, i32); 5] = [
-    day_1::main,
-    day_2::main,
-    day_3::main,
-    day_4::main,
-    day_5::main,
-];
-
-fn run_day(day_number: usize) {
+fn run_day<T, F>(day_number: usize, f: F) where T: Display, F: FnOnce(Vec<&str>) -> (T, T) {
     println!("Results for day {}", day_number);
 
     let data: Vec<_> = BufReader::new(File::open(format!("data-day_{}.txt", day_number)).unwrap()) // Open the file (crash on error)
@@ -31,7 +24,7 @@ fn run_day(day_number: usize) {
     let borrowed: Vec<_> = data.iter().map(String::as_str).collect();
 
     let now = Instant::now();
-    let (part1_answer, part2_answer) = FUNCTIONS[day_number - 1](borrowed);
+    let (part1_answer, part2_answer) = f(borrowed);
     let duration = now.elapsed();
     println!(
         "Part 1: {}, part 2: {}. Completed in {} msec ({} µsec)",
@@ -44,9 +37,10 @@ fn run_day(day_number: usize) {
 }
 
 fn main() {
-    run_day(1);
-    run_day(2);
-    run_day(3);
-    run_day(4);
-    run_day(5);
+    run_day(1, day_1::main);
+    run_day(2, day_2::main);
+    run_day(3, day_3::main);
+    run_day(4, day_4::main);
+    run_day(5, day_5::main);
+    run_day(6, day_6::main);
 }
