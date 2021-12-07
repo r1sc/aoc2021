@@ -27,3 +27,22 @@ fn part_2(values: &[i32]) -> i32 {
                          // Finally send this list of sums over to part_1
     )
 }
+
+#[test]
+fn test_sample() {
+    let data: Vec<_> = r"199
+200
+208
+210
+200
+207
+240
+269
+260
+263"
+    .split("\n")
+    .collect();
+    let (part_1, part_2) = main(data);
+    assert_eq!(part_1, 7);
+    assert_eq!(part_2, 5);
+}
