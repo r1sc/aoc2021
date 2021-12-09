@@ -24,14 +24,7 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
         .iter()
         .map(|(patterns, output_values)| {
             let digits = decode_line(patterns, output_values);
-
-            let mut i: i32 = 10_i32.pow(digits.len() as u32 - 1);
-            let mut result = 0;
-            for d in digits {
-                result += (d as i32) * i;
-                i /= 10;
-            }
-            result
+            digits.iter().fold(0, |acc: i32, cur| (acc << 3) + (acc << 1) + (*cur as i32))
         })
         .sum();
     (part_1 as i32, part_2)
