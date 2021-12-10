@@ -15,6 +15,7 @@ mod day_6;
 mod day_7;
 mod day_8;
 mod day_9;
+mod day_10;
 
 fn run_day<T, F>(day_number: usize, f: F) where T: Display, F: FnOnce(Vec<&str>) -> (T, T) {
     println!("Results for day {}", day_number);
@@ -49,4 +50,5 @@ fn main() {
     run_day(7, day_7::main);
     run_day(8, day_8::main);
     run_day(9, day_9::main);
+    run_day(10, day_10::main);
 }
