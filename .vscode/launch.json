@@ -5,17 +5,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(Windows) Launch",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/target/debug/aoc2021-rs.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "console": "integratedTerminal"
-        },
-        {
             "type": "lldb",
             "request": "launch",
             "name": "Debug executable 'aoc2021-rs'",
