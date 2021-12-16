@@ -8,13 +8,7 @@ struct State {
 
 impl State {
     fn new(width: i32, height: i32, state: Vec<u32>) -> Self {
-        State {
-            width,
-            height,
-            flashes: 0,
-            old_flashes: 0,
-            state,
-        }
+        State { width, height, flashes: 0, old_flashes: 0, state }
     }
 
     fn increase(&mut self, x: i32, y: i32) {
@@ -69,11 +63,8 @@ impl State {
 pub fn main(data: Vec<&str>) -> (i32, i32) {
     let width = data[0].len() as i32;
     let height = data.len() as i32;
-    let grid: Vec<_> = data
-        .iter()
-        .map(|row| row.chars().map(|c| c.to_digit(10).unwrap()))
-        .flatten()
-        .collect();
+    let grid: Vec<_> =
+        data.iter().map(|row| row.chars().map(|c| c.to_digit(10).unwrap())).flatten().collect();
 
     let mut state = State::new(width, height, grid);
 

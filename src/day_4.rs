@@ -13,19 +13,13 @@ impl Board {
             .iter()
             .map(|l| {
                 l.split_ascii_whitespace()
-                    .map(|col| Cell {
-                        value: col.parse::<i32>().unwrap(),
-                        marked: false,
-                    })
+                    .map(|col| Cell { value: col.parse::<i32>().unwrap(), marked: false })
                     .collect::<Vec<_>>()
             })
             .flatten()
             .collect();
 
-        Board {
-            cells,
-            already_won: false,
-        }
+        Board { cells, already_won: false }
     }
 
     pub fn mark(&mut self, drawn: i32) {
@@ -47,24 +41,15 @@ impl Board {
     }
 
     pub fn get_score(&self) -> i32 {
-        self.cells
-            .iter()
-            .filter(|&x| !x.marked)
-            .map(|x| x.value)
-            .sum()
+        self.cells.iter().filter(|&x| !x.marked).map(|x| x.value).sum()
     }
 }
 
 pub fn main(data: Vec<&str>) -> (i32, i32) {
-    let filtered_lines: Vec<_> = data
-        .into_iter()
-        .filter(|&l| l.is_empty() == false)
-        .collect();
+    let filtered_lines: Vec<_> = data.into_iter().filter(|&l| l.is_empty() == false).collect();
 
-    let drawings: Vec<_> = filtered_lines[0]
-        .split(",")
-        .map(|d| d.parse::<i32>().unwrap())
-        .collect();
+    let drawings: Vec<_> =
+        filtered_lines[0].split(",").map(|d| d.parse::<i32>().unwrap()).collect();
 
     let mut boards: Vec<_> = filtered_lines[1..].chunks(5).map(Board::new).collect();
     let mut winning_boards: Vec<i32> = Vec::new();
@@ -109,7 +94,7 @@ fn test_sample() {
 "
     .split("\n")
     .collect();
-    
+
     let (part_1, part_2) = main(data);
     assert_eq!(part_1, 4512);
     assert_eq!(part_2, 1924);

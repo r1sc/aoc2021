@@ -11,7 +11,7 @@ pub fn main(data: Vec<&str>) -> (u64, u64) {
     let get_line_points = |line: &&str| {
         let mut stack: VecDeque<char> = VecDeque::new();
         for c in line.chars() {
-            match facit.get(&c) {                
+            match facit.get(&c) {
                 Some((left, score)) => {
                     if stack.pop_front() != Some(*left) {
                         return (true, *score);
@@ -21,7 +21,8 @@ pub fn main(data: Vec<&str>) -> (u64, u64) {
             };
         }
         let autocorrect_score = stack.drain(..).fold(0, |acc, c| {
-            (acc * 5) + match c {
+            (acc * 5)
+                + match c {
                     '(' => 1,
                     '[' => 2,
                     '{' => 3,
@@ -32,10 +33,8 @@ pub fn main(data: Vec<&str>) -> (u64, u64) {
         (false, autocorrect_score)
     };
 
-    let (broken, mut incomplete): (Vec<(bool, u64)>, Vec<(bool, u64)>) = data
-        .iter()
-        .map(get_line_points)
-        .partition(|(is_broken, _)| *is_broken);
+    let (broken, mut incomplete): (Vec<(bool, u64)>, Vec<(bool, u64)>) =
+        data.iter().map(get_line_points).partition(|(is_broken, _)| *is_broken);
 
     incomplete.sort();
 

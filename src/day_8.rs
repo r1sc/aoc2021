@@ -16,7 +16,8 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
         .map(|(_, output_values)| {
             output_values
                 .iter()
-                .filter(|v| v.len() == 2 || v.len() == 4 || v.len() == 3 || v.len() == 7).count()
+                .filter(|v| v.len() == 2 || v.len() == 4 || v.len() == 3 || v.len() == 7)
+                .count()
         })
         .sum();
 
@@ -38,12 +39,8 @@ impl Seg {
     }
 
     pub fn sub(&self, b: &Self) -> Self {
-        let v: Vec<char> = self
-            .0
-            .iter()
-            .filter(|&seg| !b.0.iter().any(|&f| f == *seg))
-            .map(|f| *f)
-            .collect();
+        let v: Vec<char> =
+            self.0.iter().filter(|&seg| !b.0.iter().any(|&f| f == *seg)).map(|f| *f).collect();
         Self(v)
     }
 
@@ -130,21 +127,15 @@ fn decode_line(patterns: &Vec<&str>, output_values: &Vec<&str>) -> Vec<u8> {
     let eight = Seg::from_str(patterns.iter().find(|&p| p.len() == 7).unwrap());
 
     let seg_0 = find_seg_0(&seven, &one);
-    let five_segs: Vec<_> = patterns
-        .iter()
-        .filter(|p| p.len() == 5)
-        .map(|&s| Seg::from_str(s))
-        .collect();
+    let five_segs: Vec<_> =
+        patterns.iter().filter(|p| p.len() == 5).map(|&s| Seg::from_str(s)).collect();
 
     let (seg_3, seg_6) = find_seg_3_6(&five_segs, &one, &seg_0, &four);
     let seg_1 = find_seg_1(&four, &one, &seg_3);
     let seg_4 = find_seg_4(&eight, &four, &seg_0, &seg_3, &seg_6);
 
-    let six_segs: Vec<_> = patterns
-        .iter()
-        .filter(|p| p.len() == 6)
-        .map(|&s| Seg::from_str(s))
-        .collect();
+    let six_segs: Vec<_> =
+        patterns.iter().filter(|p| p.len() == 6).map(|&s| Seg::from_str(s)).collect();
 
     let seg_5 = find_seg_5(six_segs, vec![&seg_0, &seg_1, &seg_3, &seg_4, &seg_6]).unwrap();
     let seg_2 = find_seg_2(eight, vec![&seg_0, &seg_1, &seg_3, &seg_4, &seg_5, &seg_6]);
@@ -172,10 +163,7 @@ fn decode_line(patterns: &Vec<&str>, output_values: &Vec<&str>) -> Vec<u8> {
         (0x6F, 9),
     ]);
 
-    output_values
-        .iter()
-        .map(|v| decode(v, &all_segments, &mapping))
-        .collect()
+    output_values.iter().map(|v| decode(v, &all_segments, &mapping)).collect()
 }
 
 /*
@@ -192,16 +180,10 @@ fn test_find_seg_0() {
 #[test]
 fn test_find_seg_3_6() {
     let seg_0 = find_seg_0(&Seg::from_str("dab"), &Seg::from_str("ab"));
-    let five_segs: Vec<_> = vec!["cdfbe", "gcdfa", "fbcad"]
-        .iter()
-        .map(|&s| Seg::from_str(s))
-        .collect();
-    let (seg_3, seg_6) = find_seg_3_6(
-        &five_segs,
-        &Seg::from_str("ab"),
-        &seg_0,
-        &Seg::from_str("eafb"),
-    );
+    let five_segs: Vec<_> =
+        vec!["cdfbe", "gcdfa", "fbcad"].iter().map(|&s| Seg::from_str(s)).collect();
+    let (seg_3, seg_6) =
+        find_seg_3_6(&five_segs, &Seg::from_str("ab"), &seg_0, &Seg::from_str("eafb"));
 
     assert_eq!(seg_3.to_char(), 'f');
     assert_eq!(seg_6.to_char(), 'c');
@@ -210,16 +192,9 @@ fn test_find_seg_3_6() {
 #[test]
 fn test_find_seg_1() {
     let seg_0 = find_seg_0(&Seg::from_str("dab"), &Seg::from_str("ab"));
-    let five_segs: Vec<_> = vec!["cdfbe", "gcdfa", "fbcad"]
-        .iter()
-        .map(|&s| Seg::from_str(s))
-        .collect();
-    let (seg_3, _) = find_seg_3_6(
-        &five_segs,
-        &Seg::from_str("ab"),
-        &seg_0,
-        &Seg::from_str("eafb"),
-    );
+    let five_segs: Vec<_> =
+        vec!["cdfbe", "gcdfa", "fbcad"].iter().map(|&s| Seg::from_str(s)).collect();
+    let (seg_3, _) = find_seg_3_6(&five_segs, &Seg::from_str("ab"), &seg_0, &Seg::from_str("eafb"));
 
     let seg_1 = find_seg_1(&Seg::from_str("eafb"), &Seg::from_str("ab"), &seg_3);
     assert_eq!(seg_1.len(), 1);
@@ -229,24 +204,13 @@ fn test_find_seg_1() {
 #[test]
 fn test_find_seg_4() {
     let seg_0 = find_seg_0(&Seg::from_str("dab"), &Seg::from_str("ab"));
-    let five_segs: Vec<_> = vec!["cdfbe", "gcdfa", "fbcad"]
-        .iter()
-        .map(|&s| Seg::from_str(s))
-        .collect();
-    let (seg_3, seg_6) = find_seg_3_6(
-        &five_segs,
-        &Seg::from_str("ab"),
-        &seg_0,
-        &Seg::from_str("eafb"),
-    );
+    let five_segs: Vec<_> =
+        vec!["cdfbe", "gcdfa", "fbcad"].iter().map(|&s| Seg::from_str(s)).collect();
+    let (seg_3, seg_6) =
+        find_seg_3_6(&five_segs, &Seg::from_str("ab"), &seg_0, &Seg::from_str("eafb"));
 
-    let seg_4 = find_seg_4(
-        &Seg::from_str("acedgfb"),
-        &Seg::from_str("eafb"),
-        &seg_0,
-        &seg_3,
-        &seg_6,
-    );
+    let seg_4 =
+        find_seg_4(&Seg::from_str("acedgfb"), &Seg::from_str("eafb"), &seg_0, &seg_3, &seg_6);
     assert_eq!(seg_4.len(), 1);
     assert_eq!(seg_4.to_char(), 'g');
 }
@@ -254,35 +218,19 @@ fn test_find_seg_4() {
 #[test]
 fn test_find_seg_5() {
     let seg_0 = find_seg_0(&Seg::from_str("dab"), &Seg::from_str("ab"));
-    let five_segs: Vec<_> = vec!["cdfbe", "gcdfa", "fbcad"]
-        .iter()
-        .map(|&s| Seg::from_str(s))
-        .collect();
-    let (seg_3, seg_6) = find_seg_3_6(
-        &five_segs,
-        &Seg::from_str("ab"),
-        &seg_0,
-        &Seg::from_str("eafb"),
-    );
+    let five_segs: Vec<_> =
+        vec!["cdfbe", "gcdfa", "fbcad"].iter().map(|&s| Seg::from_str(s)).collect();
+    let (seg_3, seg_6) =
+        find_seg_3_6(&five_segs, &Seg::from_str("ab"), &seg_0, &Seg::from_str("eafb"));
     let seg_1 = find_seg_1(&Seg::from_str("eafb"), &Seg::from_str("ab"), &seg_3);
-    let seg_4 = find_seg_4(
-        &Seg::from_str("acedgfb"),
-        &Seg::from_str("eafb"),
-        &seg_0,
-        &seg_3,
-        &seg_6,
-    );
+    let seg_4 =
+        find_seg_4(&Seg::from_str("acedgfb"), &Seg::from_str("eafb"), &seg_0, &seg_3, &seg_6);
 
-    let zero_six_nine: Vec<_> = vec!["cefabd", "cdfgeb", "cagedb"]
-        .iter()
-        .map(|&s| Seg::from_str(s))
-        .collect();
+    let zero_six_nine: Vec<_> =
+        vec!["cefabd", "cdfgeb", "cagedb"].iter().map(|&s| Seg::from_str(s)).collect();
     let seg_5 = find_seg_5(zero_six_nine, vec![&seg_0, &seg_1, &seg_3, &seg_4, &seg_6]);
     let eight = Seg::from_str("acedgfb");
-    let seg_2 = find_seg_2(
-        eight,
-        vec![&seg_0, &seg_1, &seg_3, &seg_4, &seg_5.unwrap(), &seg_6],
-    );
+    let seg_2 = find_seg_2(eight, vec![&seg_0, &seg_1, &seg_3, &seg_4, &seg_5.unwrap(), &seg_6]);
 
     assert_eq!(seg_2.to_char(), 'a');
 }
@@ -324,12 +272,11 @@ gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce
 }
 
 #[test]
-fn test_part_2() {    
+fn test_part_2() {
     let data: Vec<_> =
         "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
             .split("\n")
             .collect();
     let (_, part_2) = main(data);
     assert_eq!(part_2, 5353);
-
 }

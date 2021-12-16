@@ -3,11 +3,8 @@ use pathfinding::prelude::{absdiff, astar};
 pub fn main(data: Vec<&str>) -> (u32, u32) {
     let height = data.len() as u32;
     let width = data[0].len() as u32;
-    let grid: Vec<_> = data
-        .iter()
-        .map(|row| row.chars().map(|c| c.to_digit(10).unwrap()))
-        .flatten()
-        .collect();
+    let grid: Vec<_> =
+        data.iter().map(|row| row.chars().map(|c| c.to_digit(10).unwrap())).flatten().collect();
 
     type Point = (u32, u32);
 
@@ -23,7 +20,6 @@ pub fn main(data: Vec<&str>) -> (u32, u32) {
     let goal_2 = (width * 5 - 1, height * 5 - 1);
 
     let heuristic = |&(x, y): &Point, &(gx, gy): &Point| absdiff(x, gx) + absdiff(y, gy);
-
 
     let successors = |&(x, y): &Point, num_tiles: u32| {
         let pos_and_risk = |x: u32, y: u32| -> (Point, u32) { ((x, y), get_risk(x, y)) };
@@ -44,8 +40,12 @@ pub fn main(data: Vec<&str>) -> (u32, u32) {
         result
     };
 
-    let result_part_1 = astar(&(0, 0), |p| successors(p, 1), |xy| { heuristic(xy, &goal_1)}, |&p: &Point| { p == goal_1 }).unwrap();
-    let result_part_2 = astar(&(0, 0), |p| successors(p, 5), |xy| { heuristic(xy, &goal_2)}, |&p: &Point| { p == goal_2 }).unwrap();
+    let result_part_1 =
+        astar(&(0, 0), |p| successors(p, 1), |xy| heuristic(xy, &goal_1), |&p: &Point| p == goal_1)
+            .unwrap();
+    let result_part_2 =
+        astar(&(0, 0), |p| successors(p, 5), |xy| heuristic(xy, &goal_2), |&p: &Point| p == goal_2)
+            .unwrap();
 
     (result_part_1.1.into(), result_part_2.1.into())
 }

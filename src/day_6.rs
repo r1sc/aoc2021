@@ -1,8 +1,5 @@
 pub fn main(data: Vec<&str>) -> (u64, u64) {
-    let state: Vec<_> = data[0]
-        .split(",")
-        .map(|i| i.parse::<i32>().unwrap())
-        .collect();
+    let state: Vec<_> = data[0].split(",").map(|i| i.parse::<i32>().unwrap()).collect();
 
     let calc_population = |days: usize| {
         let mut timers = vec![0; 9];

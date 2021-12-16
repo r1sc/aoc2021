@@ -1,18 +1,12 @@
 pub fn main(data: Vec<&str>) -> (i32, i32) {
-    let state: Vec<_> = data[0]
-        .split(",")
-        .map(|i| i.parse::<i32>().unwrap())
-        .collect();
+    let state: Vec<_> = data[0].split(",").map(|i| i.parse::<i32>().unwrap()).collect();
 
     let max_horizontal_position = *state.iter().max().unwrap();
 
     let calc_fuel = |x: i32| -> (i32, i32) {
         let distances: Vec<_> = state.iter().map(|cur| (cur - x).abs()).collect();
         let fuel_cost_v1 = distances.iter().sum();
-        let fuel_cost_v2 = distances
-            .iter()
-            .map(|&distance| (1..=distance).sum::<i32>())
-            .sum();
+        let fuel_cost_v2 = distances.iter().map(|&distance| (1..=distance).sum::<i32>()).sum();
 
         (fuel_cost_v1, fuel_cost_v2)
     };

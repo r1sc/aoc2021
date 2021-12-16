@@ -17,14 +17,7 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
 
 #[test]
 fn test_sample() {
-    let data = vec![
-        "forward 5",
-        "down 5",
-        "forward 8",
-        "up 3",
-        "down 8",
-        "forward 2",
-    ];
+    let data = vec!["forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"];
     let (part1_answer, part2_answer) = main(data);
     assert!(part1_answer == 150);
     assert!(part2_answer == 900);

@@ -1,10 +1,13 @@
 use std::collections::{HashMap, HashSet};
 
 pub fn main(data: Vec<&str>) -> (i32, i32) {
-    let tuples: Vec<_> = data.iter().map(|line| {
-        let mut splitted = line.split("-");
-        (splitted.next().unwrap(), splitted.next().unwrap())
-    }).collect();
+    let tuples: Vec<_> = data
+        .iter()
+        .map(|line| {
+            let mut splitted = line.split("-");
+            (splitted.next().unwrap(), splitted.next().unwrap())
+        })
+        .collect();
 
     let mut edges = HashMap::new();
     for (k, v) in tuples {

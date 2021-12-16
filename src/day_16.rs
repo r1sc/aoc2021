@@ -18,24 +18,6 @@ struct Packet {
 }
 
 impl Packet {
-    fn print(&self) {
-        println!("---- PACKET START ----");
-        println!("Version {}, Id {}", self.version, self.id);
-        match &self.data {
-            PacketData::Literal(literal) => println!("Literal packet value: {}", literal.value),
-            PacketData::Operator(operator) => {
-                println!(
-                    "Operator packet sub packet count: {}",
-                    operator.sub_packets.len()
-                );
-                for sub_packet in &operator.sub_packets {
-                    sub_packet.print();
-                }
-            }
-        }
-        println!("---- PACKET END ----");
-    }
-
     fn sum_versions(&self) -> u32 {
         let mut result = 0_u32;
         match &self.data {
@@ -67,31 +49,19 @@ impl Packet {
                     // Greater than packets
                     5 => {
                         let (a, b) = (evaluations.next().unwrap(), evaluations.next().unwrap());
-                        if a > b {
-                            1
-                        } else {
-                            0
-                        }
-                    },
+                        return if a > b { 1 } else { 0 };
+                    }
                     // Less than packets
                     6 => {
                         let (a, b) = (evaluations.next().unwrap(), evaluations.next().unwrap());
-                        if a < b {
-                            1
-                        } else {
-                            0
-                        }
-                    },
+                        return if a < b { 1 } else { 0 };
+                    }
                     // Equal to packets
                     7 => {
                         let (a, b) = (evaluations.next().unwrap(), evaluations.next().unwrap());
-                        if a == b {
-                            1
-                        } else {
-                            0
-                        }
-                    },
-                    _ => panic!("Unknown operator packet type")
+                        return if a == b { 1 } else { 0 };
+                    }
+                    _ => panic!("Unknown operator packet type"),
                 }
             }
         }
@@ -137,9 +107,8 @@ impl Bitstream {
     }
 
     fn pull_bits(&mut self, num_bits: u32) -> String {
-        let str: String = self.bits[self.position..self.position + (num_bits as usize)]
-            .into_iter()
-            .collect();
+        let str: String =
+            self.bits[self.position..self.position + (num_bits as usize)].into_iter().collect();
         self.position += num_bits as usize;
         str
     }
@@ -156,11 +125,6 @@ impl Bitstream {
     fn parse_as_number(&mut self) -> u64 {
         let str: String = self.bits.iter().collect();
         u64::from_str_radix(&str, 2).unwrap()
-    }
-
-    fn print(&self) {
-        let str: String = self.bits.iter().collect();
-        println!("{}", str);
     }
 
     fn parse_literal_packet(&mut self) -> LiteralPacket {
@@ -201,16 +165,8 @@ impl Bitstream {
         let version = self.pull_number(3);
         let id = self.pull_number(3);
         match id {
-            4 => Packet {
-                version,
-                id,
-                data: PacketData::Literal(self.parse_literal_packet()),
-            },
-            _ => Packet {
-                version,
-                id,
-                data: PacketData::Operator(self.parse_operator_packet()),
-            },
+            4 => Packet { version, id, data: PacketData::Literal(self.parse_literal_packet()) },
+            _ => Packet { version, id, data: PacketData::Operator(self.parse_operator_packet()) },
         }
     }
 
