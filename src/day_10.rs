@@ -1,6 +1,6 @@
 use std::collections::{HashMap, VecDeque};
 
-pub fn main(data: Vec<&str>) -> (i32, i32) {
+pub fn main(data: Vec<&str>) -> (u64, u64) {
     let facit = HashMap::from([
         (')', ('(', 3_u64)),
         (']', ('[', 57_u64)),
@@ -39,10 +39,10 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
 
     incomplete.sort();
 
-    let part_1_answer: u64 = broken.iter().map(|(_, score)| score).sum();
-    let part_2_answer: u64 = incomplete[incomplete.len() / 2].1;
+    let part_1_answer = broken.iter().map(|(_, score)| score).sum();
+    let part_2_answer = incomplete[incomplete.len() / 2].1;
 
-    (part_1_answer as i32, part_2_answer as i32)
+    (part_1_answer, part_2_answer)
 }
 
 #[test]

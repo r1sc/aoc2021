@@ -1,4 +1,4 @@
-pub fn main(data: Vec<&str>) -> (i32, i32) {
+pub fn main(data: Vec<&str>) -> (u32, u32) {
     let bit_width = data[0].len();
     let bins: Vec<_> = data
         .into_iter()
@@ -46,8 +46,8 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
     let oxygen_generator_rating = trav(&bins, |a, b| { a >= b }, 0, bit_width);
     let co2_scrubber_rating = trav(&bins,  |a, b| { a < b }, 0, bit_width);
     (
-        (epsilon * gamma) as i32,
-        (oxygen_generator_rating * co2_scrubber_rating) as i32,
+        epsilon * gamma,
+        oxygen_generator_rating * co2_scrubber_rating,
     )
 }
 
