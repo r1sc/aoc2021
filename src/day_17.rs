@@ -20,7 +20,7 @@ pub fn main(data: Vec<&str>) -> (i32, i32) {
         }
     }
 
-    let &(xx, yy, max_y) =
+    let &(_, _, max_y) =
         hits.iter().max_by(|(_, _, maxy1), (_, _, maxy2)| maxy1.cmp(maxy2)).unwrap();
 
     (max_y, hits.len() as i32)
