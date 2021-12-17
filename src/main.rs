@@ -21,6 +21,7 @@ mod day_6;
 mod day_7;
 mod day_8;
 mod day_9;
+mod day_17;
 
 fn run_day<A, B>(day_number: usize, f: impl FnOnce(Vec<&str>) -> (A, B))
 where
@@ -64,4 +65,5 @@ fn main() {
     // run_day(12, day_12::main);
     run_day(15, day_15::main);
     run_day(16, day_16::main);
+    run_day(17, day_17::main);
 }
